@@ -12,8 +12,8 @@ hs_err_pid*
 
 # Intellij
 *.iml
-.idea
+.idea/
 
 # Gradle
 .gradle/
-build
+build/

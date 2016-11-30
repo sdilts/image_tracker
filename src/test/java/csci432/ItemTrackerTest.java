@@ -12,9 +12,13 @@ public class ItemTrackerTest {
     @Test
     public void insertItemTest() {
 	ItemTracker t = new ItemTracker();
-	//TYPE_INT_ARGB is a placeholder 
-	t.insertItem(new BufferedImage(500,500, BufferedImage.TYPE_INT_ARGB));
-	assert(t.isProcessing() == true);
+	//TYPE_INT_ARGB is a placeholder
+	int numEnter = 4;
+	for(int i = 0; i < numEnter; i++) {
+	    t.insertItem(new BufferedImage(500,500, BufferedImage.TYPE_INT_ARGB));
+	}
+	//may fail if items are being processed in the background:
+	assertThat(t.itemsWaiting(), is(numEnter));
     }
 
     @Test
@@ -22,7 +26,11 @@ public class ItemTrackerTest {
 	ItemTracker t = new ItemTracker();
 	//TYPE_INT_ARGB is a placeholder 
 	t.insertItem(new BufferedImage(500,500, BufferedImage.TYPE_INT_ARGB));
+	t.insertItem(new BufferedImage(500,500, BufferedImage.TYPE_INT_ARGB));
+	assertThat(t.itemsWaiting(), is(2));
 	t.processItem();
-	assert(t.isProcessing() == false);
+	assertThat(t.itemsWaiting(), is(1));
+	t.processItem();
+	assertThat(t.itemsWaiting(), is(0));
     }
 }

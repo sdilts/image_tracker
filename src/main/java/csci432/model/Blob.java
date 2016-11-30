@@ -19,13 +19,22 @@ import java.util.Map;
  **/
 public class Blob {
     @JsonProperty("locations")
+    /**
+     * Locations is a map from image index (int) to the location of the blob in the image(Point)
+     */
     private Map<Integer, Point> locations;
 
     @JsonCreator
+    /**
+     * Should never be used, it this is for deserialization of blob
+     */
     public Blob(Map<Integer, Point> locations) {
         this.locations =locations;
     }
 
+    /**
+     * Creates a new Hashmap and the Blob object
+     */
     public Blob() {
         locations = new HashMap<>();
     }

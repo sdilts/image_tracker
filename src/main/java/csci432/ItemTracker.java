@@ -19,15 +19,25 @@ public class ItemTracker<T> {
     }
 
     /**
+     * Starts the ImageTracker service
+     */
+    public void start() {
+	new Thread(() -> {
+		run();
+	}).start();
+    }
+
+    /**
      * The method that does stuff
      **/
-    public void run() {
-	while(!queue.isEmpty()) {
-	    //take is blocking equivalent
-	    BufferedImage item = queue.poll();
-	    processItem(item);
-	} 
-	
+    private void run() {
+	while(true) {
+	    if(!queue.isEmpty()) {
+		//take is blocking equivalent
+		BufferedImage item = queue.poll();
+		processItem(item);
+	    }
+	}
     }
 
     /**

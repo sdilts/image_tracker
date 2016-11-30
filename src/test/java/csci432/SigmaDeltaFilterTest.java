@@ -1,24 +1,27 @@
-package java.csci432;
+package csci432;
 
-import junit.framework.TestCase;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 /**
  * Created by alex on 11/30/16.
  */
-public class SigmaDeltaFilterTest extends TestCase {
-    public void testFilter() throws Exception {
+public class SigmaDeltaFilterTest  {
+    public void testFilter()  {
+	SigmaDeltaFilter f = new SigmaDeltaFilter();
+	
+    }
+
+    public void testRefreshBackground()  {
 
     }
 
-    public void testRefreshBackground() throws Exception {
+    public void testSetBackground() {
 
     }
 
-    public void testSetBackground() throws Exception {
-
-    }
-
-    public void testFilterImage() throws Exception {
+    public void testFilterImage() {
 
     }
 

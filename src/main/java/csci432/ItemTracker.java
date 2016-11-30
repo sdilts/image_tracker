@@ -1,22 +1,21 @@
 package csci432;
 import java.util.concurrent.*;
 import java.util.*;
+import java.awt.image.BufferedImage;
 
 /**
- * Class used for keeping track of the moving objects, called blobs,
- * taken from the recorded images.
+ * Class used for identifying moving objects, called blobs, based off
+ * of images that have been passed through Sigma-Delta and edge
+ * detection algorithms.
  *
  **/
-/* probably use an actual class rather than generics: (I don't know
- * what class to use) 
- */
 public class ItemTracker<T> {
-    BlockingQueue<T> queue;
-    List<T> currentBlobs;
+    BlockingQueue<BufferedImage> queue;
+    List<Blob> currentBlobs;
 
     public ItemTracker() {
-	queue = new LinkedBlockingQueue<T>();
-	currentBlobs = new LinkedList<T>();
+	queue = new LinkedBlockingQueue<BufferedImage>();
+	currentBlobs = new LinkedList<Blob>();
     }
 
     /**
@@ -36,20 +35,23 @@ public class ItemTracker<T> {
     /**
      * Returns whether or not there are still items to be processed in
      * the image queue.
+     * 
      * @return true if still processing
      **/
-    public boolean stillProcessing() {
+    public boolean isProcessing() {
 	return !queue.isEmpty();
     }
 
     /**
-     * Inserts the given item into the queue to be processed
+     * Inserts the given item into the image queue to be processed
+     * 
      * @param item an item to be inserted into the processing queue
      **/
-    public void insertItem(T item) {
+    public void insertItem(BufferedImage item) {
 	try {
-	//put will block until finished:
+	    //put will block until finished:
 	    queue.put(item);
+	    //errors when interrupted:
 	} catch(InterruptedException e) {
 	    e.printStackTrace();
 	    System.exit(1);
@@ -57,30 +59,39 @@ public class ItemTracker<T> {
     }
 
     /**
-     * Inserts the given items into the queue to be processed
+     * Inserts the given items into the image queue to be processed
      *
      * @param item a list whose contents are to be inserted into the processing queue
      **/
-    public void insertItem(T[] item) {
-	for(T i : item) {
+    public void insertItem(BufferedImage[] item) {
+	for(BufferedImage i : item) {
 	    insertItem(i);
 	}
     }
 
     /**
-     * Process the next element in the queue:
+     * Public method for making the ImageTracker to process an
+     * item. Should not be used when the ImageTracker is in its own thread.
+     * Processes the next element in the input queue
      **/
     public void processItem() {
-	processItem(queue.poll());
+	try {
+	//BlockingQueue.take() is a blocking function
+	    processItem(queue.take());
+	} catch(InterruptedException e) {
+	    e.printStackTrace();
+	    System.exit(1);
+	}
     }
     
     
     /**
-     * Method that determines how the given item fits into the history
-     * of previous items
+     * Method that determines how the given image relates to the
+     * previous images given and determines what blobs are present 
+     * 
      * @param item Item to be processed;
      **/
-    private void processItem(T item) {
+    private void processItem(BufferedImage item) {
 	
     }
 }

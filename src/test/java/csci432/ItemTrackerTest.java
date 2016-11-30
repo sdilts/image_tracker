@@ -1,6 +1,7 @@
 package csci432;
 
 import org.junit.Test;
+import java.awt.image.BufferedImage;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -11,15 +12,17 @@ public class ItemTrackerTest {
     @Test
     public void insertItemTest() {
 	ItemTracker t = new ItemTracker();
-	t.insertItem(new Object());
-	assert(t.stillProcessing() == true);
+	//TYPE_INT_ARGB is a placeholder 
+	t.insertItem(new BufferedImage(500,500, BufferedImage.TYPE_INT_ARGB));
+	assert(t.isProcessing() == true);
     }
 
     @Test
     public void processItemTest() {
 	ItemTracker t = new ItemTracker();
-	t.insertItem(new Object());
+	//TYPE_INT_ARGB is a placeholder 
+	t.insertItem(new BufferedImage(500,500, BufferedImage.TYPE_INT_ARGB));
 	t.processItem();
-	assert(t.stillProcessing() == false);
+	assert(t.isProcessing() == false);
     }
 }

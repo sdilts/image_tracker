@@ -1,4 +1,6 @@
 package csci432;
+import csci432.model.Blob;
+
 import java.util.concurrent.*;
 import java.util.*;
 import java.awt.image.BufferedImage;

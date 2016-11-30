@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
  *
  **/
 public class ItemTracker<T> {
-    BlockingQueue<BufferedImage> queue;
+    Queue<BufferedImage> queue;
     List<Blob> currentBlobs;
 
     public ItemTracker() {
@@ -22,14 +22,12 @@ public class ItemTracker<T> {
      * The method that does stuff
      **/
     public void run() {
-	/*
-	while(true) {
-	    if(!queue.isEmpty) {
-		T item = queue.take();
-		processItem(item);
-	    }
+	while(!queue.isEmpty()) {
+	    //take is blocking equivalent
+	    BufferedImage item = queue.poll();
+	    processItem(item);
 	} 
-	*/
+	
     }
 
     /**
@@ -38,8 +36,8 @@ public class ItemTracker<T> {
      * 
      * @return true if still processing
      **/
-    public boolean isProcessing() {
-	return !queue.isEmpty();
+    public int itemsWaiting() {
+	return queue.size();
     }
 
     /**
@@ -48,14 +46,8 @@ public class ItemTracker<T> {
      * @param item an item to be inserted into the processing queue
      **/
     public void insertItem(BufferedImage item) {
-	try {
-	    //put will block until finished:
-	    queue.put(item);
-	    //errors when interrupted:
-	} catch(InterruptedException e) {
-	    e.printStackTrace();
-	    System.exit(1);
-	}
+	//BlockingQueue.put will block until finished:
+	queue.add(item);
     }
 
     /**
@@ -63,7 +55,7 @@ public class ItemTracker<T> {
      *
      * @param item a list whose contents are to be inserted into the processing queue
      **/
-    public void insertItem(BufferedImage[] item) {
+    public void insertItem(List<BufferedImage> item) {
 	for(BufferedImage i : item) {
 	    insertItem(i);
 	}
@@ -75,13 +67,8 @@ public class ItemTracker<T> {
      * Processes the next element in the input queue
      **/
     public void processItem() {
-	try {
-	//BlockingQueue.take() is a blocking function
-	    processItem(queue.take());
-	} catch(InterruptedException e) {
-	    e.printStackTrace();
-	    System.exit(1);
-	}
+	//BlockingQueue.take() is equivalent blocking function
+	processItem(queue.poll());
     }
     
     

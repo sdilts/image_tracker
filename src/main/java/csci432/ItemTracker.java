@@ -34,7 +34,7 @@ public class ItemTracker<T> {
      * Returns whether or not there are still items to be processed in
      * the image queue.
      * 
-     * @return true if still processing
+     * @return the items that are still in the image queue
      **/
     public int itemsWaiting() {
 	return queue.size();

@@ -1,4 +1,5 @@
 package csci432;
+import com.hopding.jrpicam.*;
 
 public class Main {
     /**

@@ -30,6 +30,8 @@ public class SigmaDeltaFilter {
             image = filterImage(image);
         }
 
+        numFiltered++;
+
         return image;
     }
 

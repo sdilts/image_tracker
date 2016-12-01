@@ -10,12 +10,16 @@ import java.awt.image.BufferedImage;
  * of images that have been passed through Sigma-Delta and edge
  * detection algorithms.
  *
+ * @param T the type of the object that will process each item
  **/
-public class ItemTracker<T> {
-    Queue<BufferedImage> queue;
-    List<Blob> currentBlobs;
+public class ProcessController {
+    private Queue<BufferedImage> queue;
+    private List<Blob> currentBlobs;
+    private IProcessImage processor;
 
-    public ItemTracker() {
+    public ProcessController(IProcessImage processor) {
+	this.processor = processor;
+	
 	queue = new LinkedBlockingQueue<BufferedImage>();
 	currentBlobs = new LinkedList<Blob>();
     }
@@ -39,6 +43,17 @@ public class ItemTracker<T> {
 		BufferedImage item = queue.poll();
 		processItem(item);
 	    }
+	}
+    }
+
+    /**
+     * Processes all items left in the queue
+     **/
+    public void flushQueue() {
+	while(!queue.isEmpty()) {
+	    //take is blocking equivalent
+	    BufferedImage item = queue.poll();
+	    processItem(item);
 	}
     }
 
@@ -83,7 +98,6 @@ public class ItemTracker<T> {
 	processItem(queue.poll());
     }
     
-    
     /**
      * Method that determines how the given image relates to the
      * previous images given and determines what blobs are present 
@@ -91,6 +105,6 @@ public class ItemTracker<T> {
      * @param item Item to be processed;
      **/
     private void processItem(BufferedImage item) {
-	
+	processor.processImage(item);
     }
 }

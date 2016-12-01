@@ -5,6 +5,7 @@ import com.hopding.jrpicam.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.*;
+import java.io.IOException;
 import java.awt.image.BufferedImage;
 
 public class CameraTimer {
@@ -46,7 +47,13 @@ public class CameraTimer {
     private class TakePicture extends TimerTask {
 	
 	public void run() {
-	    queue.put(camera.takeBufferedStill());
+	    try {
+		queue.put(camera.takeBufferedStill());
+	    } catch(IOException e) {
+		e.printStackTrace();
+	    } catch(InterruptedException e) {
+		e.printStackTrace();
+	    }
 	}
 
     }

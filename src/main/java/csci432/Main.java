@@ -53,6 +53,7 @@ public class Main {
 		picNum++;
 	    }
 	}
+	timer.stop();
     }
 
     public static void saveImage(BufferedImage img, String saveDir, String fileName) {

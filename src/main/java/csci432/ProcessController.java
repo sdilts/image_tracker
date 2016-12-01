@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
  * of images that have been passed through Sigma-Delta and edge
  * detection algorithms.
  *
- * @param T the type of the object that will process each item
  **/
 public class ProcessController {
     private Queue<BufferedImage> queue;

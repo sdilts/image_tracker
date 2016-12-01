@@ -1,5 +1,7 @@
 package csci432;
-import com.hopding.jrpicam.*;
+
+import csci432.camera.Camera;
+import csci432.camera.RaspberryPiCam;
 
 public class Main {
     /**
@@ -12,6 +14,7 @@ public class Main {
     }
 
     public static void main(String [] args) {
-        System.out.println(helloWorld());
+        Camera camera = new RaspberryPiCam(".");
+        camera.takePicture();
     }
 }

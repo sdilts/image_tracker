@@ -9,7 +9,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class ProcessControllerTest {
-
     //prep for when using threads for this
     private String threadName = "testing";
     private int checkColor = 255;
@@ -51,11 +50,8 @@ public class ProcessControllerTest {
     }
 
     private class TestProcess implements IProcessImage {
-
 	private int itemsGiven = 0;
-
 	private boolean orderCorrect = true;
-
 	//private boolean threadCorrect;
 
 	public TestProcess() {
@@ -81,7 +77,5 @@ public class ProcessControllerTest {
 	public boolean getOrderCorrect() {
 	    return orderCorrect;
 	}
-	
-
     }
 }

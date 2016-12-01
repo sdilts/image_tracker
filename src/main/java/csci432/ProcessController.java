@@ -55,7 +55,6 @@ public class ProcessController {
 	    BufferedImage item = queue.poll();
 	    processItem(item);
 	}
-
     }
 
     /**

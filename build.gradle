@@ -119,7 +119,6 @@ repositories {
 }
 
 dependencies {
-    compile project(':jrpicam')
     compile(group: "org.springframework.boot", name: "spring-boot-starter-web") {
         exclude(module: "spring-boot-starter-tomcat")
         exclude(group: "org.hibernate")

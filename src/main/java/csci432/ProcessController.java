@@ -12,12 +12,12 @@ import java.awt.image.BufferedImage;
  *
  * @param T the type of the object that will process each item
  **/
-public class ProcessController<T extends IProcessImage> {
+public class ProcessController {
     private Queue<BufferedImage> queue;
     private List<Blob> currentBlobs;
-    private T processor;
+    private IProcessImage processor;
 
-    public ProcessController(T processor) {
+    public ProcessController(IProcessImage processor) {
 	this.processor = processor;
 	
 	queue = new LinkedBlockingQueue<BufferedImage>();
@@ -98,7 +98,6 @@ public class ProcessController<T extends IProcessImage> {
 	//BlockingQueue.take() is equivalent blocking function
 	processItem(queue.poll());
     }
-    
     
     /**
      * Method that determines how the given image relates to the

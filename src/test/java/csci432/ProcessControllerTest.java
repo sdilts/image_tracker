@@ -27,7 +27,7 @@ public class ProcessControllerTest {
     @Test
     public void insertItemTest() {
 	TestProcess t = new TestProcess();
-	ProcessController<TestProcess> proc = new ProcessController<TestProcess>(t);
+	ProcessController proc = new ProcessController(t);
 	int numEnter = 4;
 
 	enterItems(proc, numEnter);

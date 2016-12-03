@@ -106,9 +106,4 @@ public class SigmaDeltaFilterTest  {
         d = f.filterImageSubtract(a);
         assertThat(d, equalTo(c));
     }
-
-
-
-
-
 }

@@ -63,7 +63,7 @@ public class Blob {
      * Returns the location of the blob in the given picture index
      *
      * @param picIndex index of the picture
-     * @returns the location of the blob, null if it isn't in the given picture
+     * @return the location of the blob, null if it isn't in the given picture
      */
     public Point getLocation(Integer picIndex) {
         return locations.get(picIndex);
@@ -137,7 +137,6 @@ public class Blob {
      * Saves the blob as a JSON file
      *
      * @param fileName file to save object as
-     * @exception IOException ex happens when file can't be saved correctly
      */
     public void save(String fileName) {
         ObjectMapper mapper = new ObjectMapper();
@@ -152,7 +151,6 @@ public class Blob {
      * Loads the blob from the JSON file
      *
      * @param fileName file to load object from
-     * @exception IOException ex happens when the file can't be loaded correctly
      * @return The loaded blob
      */
     public static Blob load(String fileName) {

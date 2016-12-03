@@ -1,16 +1,19 @@
 package csci432;
-//import com.hopding.jrpicam.*;
+
+import csci432.camera.Camera;
+import csci432.camera.RaspberryPiCam;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Main {
-    /**
-     * loads images from a file to be inputted into SigmaDeltaFilter
-     *
-     * @return A string that says Hello World!
-     */
-    public static void main(String[] args) {
+    public static void main(String ... args) {
+        OptionSet options = getOptions(args);
+        Camera camera = new RaspberryPiCam(options.valueOf("save_loc").toString());
+        camera.takePicture();
+
         System.out.println("Processing files");
         BufferedImage input, output;
         String path = args[0];  //"~/testImage1";
@@ -28,5 +31,18 @@ public class Main {
                 System.out.printf("Couldn't find image %s\n", fileName);
             }
         }
+    }
+
+    /**
+     * Gets the options from the args
+     * @param args commandline arguments
+     * @return the value for the options
+     */
+    static OptionSet getOptions(String... args) {
+        OptionParser parser = new OptionParser();
+        parser.accepts("save_loc").withRequiredArg().ofType(String.class).defaultsTo("/media/pi/SAGE/pictures/");
+        parser.accepts("load_loc").withOptionalArg().ofType(String.class);
+        OptionSet options = parser.parse(args);
+        return options;
     }
 }

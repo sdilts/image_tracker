@@ -44,11 +44,19 @@ public class ImageUtil {
 	
     /**
      * Loads the given file location as a buffered image
+     * Returns null if the image is not found
      *
      * @param filename the location of the image
+     * @return specified image or null
      **/
-    public static BufferedImage loadImage(String filename) throws IOException {
-	return ImageIO.read(new File(filename));
+    public static BufferedImage loadImage(String filename) {
+	BufferedImage img = null;
+	try {
+	    return ImageIO.read(new File(filename));
+	} catch (IOException e) {
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
     /**
@@ -60,10 +68,18 @@ public class ImageUtil {
      * @param img the image to be saved
      * @param filename the name of the file without an extension
      * @param extension the type of image that will be saved
+     * @return true if the flile was saved correctly
      **/
-    public static void saveImage(BufferedImage img, String filename, String extension) throws IOException {
+    public static booleansaveImage(BufferedImage img, String filename, String extension) {
 	File outputfile = new File(filename + extension);
-	ImageIO.write(img, extension, outputfile);
+	try {
+	    
+	    ImageIO.write(img, extension, outputfile);
+	    return true;
+	} catch(IOException e) {
+	    e.printStackTrace();
+	    return false;
+	}
     }
 
     // public String getSaveDir() {

@@ -70,7 +70,7 @@ public class ImageUtil {
      * @param extension the type of image that will be saved
      * @return true if the flile was saved correctly
      **/
-    public static booleansaveImage(BufferedImage img, String filename, String extension) {
+    public static boolean saveImage(BufferedImage img, String filename, String extension) {
 	File outputfile = new File(filename + extension);
 	try {
 	    

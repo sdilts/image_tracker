@@ -18,8 +18,8 @@ public class Main {
         camera.takePicture();
 
         LOGGER.info("Processing files...");
-        BufferedImage input, output;
         if (options.hasArgument("load_loc")) {
+            BufferedImage input, output;
             String path = options.valueOf("load_loc").toString();
             String fileName = new String();
             SigmaDeltaFilter f = new SigmaDeltaFilter();

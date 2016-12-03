@@ -6,29 +6,33 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.util.logging.Logger;
 
 public class Main {
+    private static final Logger LOGGER = Logger.getLogger(
+            Thread.currentThread().getStackTrace()[0].getClassName()
+    );
     public static void main(String ... args) {
         OptionSet options = getOptions(args);
         Camera camera = new RaspberryPiCam(options.valueOf("save_loc").toString());
         camera.takePicture();
 
-        System.out.println("Processing files");
+        LOGGER.info("Processing files...");
         BufferedImage input, output;
-        String path = args[0];  //"~/testImage1";
-        String fileName = "~/testImage1";
-        SigmaDeltaFilter f = new SigmaDeltaFilter();
-        for (int i = 0; i < 55; i++) {
-            fileName = path + "/capture" + i + ".jpg";
-            input = ImageUtil.loadImage(fileName);
-            if (input != null) {
-                output = f.filter(input);
-                ImageUtil.saveImage(output, path + "/filter"
-                        + i + ".", "jpg");
-                System.out.println(path + "/filter:" + i + ".jpg");
-            } else {
-                System.out.printf("Couldn't find image %s\n", fileName);
+        if (options.hasArgument("load_loc")) {
+            String path = options.valueOf("load_loc").toString();
+            String fileName = new String();
+            SigmaDeltaFilter f = new SigmaDeltaFilter();
+            for (int i = 0; i < 55; i++) {
+                fileName = path + "/capture" + i + ".jpg";
+                input = ImageUtil.loadImage(fileName);
+                if (input != null) {
+                    output = f.filter(input);
+                    ImageUtil.saveImage(output, path + "/filter" + i + ".", "jpg");
+                    LOGGER.info(path + "/filter:" + i + ".jpg");
+                } else {
+                    LOGGER.info("Couldn't find image" +fileName);
+                }
             }
         }
     }

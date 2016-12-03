@@ -2,6 +2,7 @@ package csci432;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.IOException;
 import java.awt.image.BufferedImage;
 
 
@@ -11,40 +12,42 @@ import java.awt.image.BufferedImage;
  **/
 public class ImageUtil {
 
-    private String saveDir;
-    private String fileExtension;
+    // private String saveDir;
+    // private String fileExtension;
     
-    public class ImageUtil(String saveDir, String fileExtension) {
-	this.saveDir = saveDir;
-	this.fileExtension = fileExtension;
-    }
+    // public ImageUtil(String saveDir, String fileExtension) {
+    // 	this.saveDir = saveDir;
+    // 	this.fileExtension = fileExtension;
+    // }
 
-    /** 
-     * Loads the given file as a BufferedImage. The directory used will be the one specified by this
-     * object's saveDir variable
-     *
-     * @param filename the relative filename to this object's save directory
-     **/
-    public BufferedImage getImage(String filename) {
-	return loadImage(saveDir + fileName);
-    }
-    /**
-     * Loads the given file as a BufferedImage. The directory used will be the one specified by this
-     * object's saveDir variable
-     *
-     * @param img the image to be saved
-     * @param filename the relative filename to this object's save directory
-     **/
-    public void storeImage(BufferedImage img, String filename) {
-	saveImage(img, fileName + saveDir, fileExtension);
-    }
+    // /** 
+    //  * Loads the given file as a BufferedImage. The directory used will be the one specified by this
+    //  * object's saveDir variable
+    //  *
+    //  * @param filename the relative filename to this object's save directory
+    //  **/
+    // public BufferedImage getImage(String fileName) {
+    // 	return loadImage(saveDir + fileName);
+    // }
     
+    // /**
+    //  * Loads the given file as a BufferedImage. The directory used will be the one specified by this
+    //  * object's saveDir variable
+    //  *
+    //  * @param img the image to be saved
+    //  * @param filename the relative filename to this object's save directory
+    //  **/
+    // public void storeImage(BufferedImage img, String fileName) throws IOException {
+    // 	saveImage(img, fileName + saveDir, fileExtension);
+    // }
+    
+	
     /**
      * Loads the given file location as a buffered image
      *
      * @param filename the location of the image
      **/
-    public static BufferedImage loadImage(String filename) {
+    public static BufferedImage loadImage(String filename) throws IOException {
 	return ImageIO.read(new File(filename));
     }
 
@@ -58,24 +61,24 @@ public class ImageUtil {
      * @param filename the name of the file without an extension
      * @param extension the type of image that will be saved
      **/
-    public static void saveImage(BufferedImage img, String filename, String extension) {
+    public static void saveImage(BufferedImage img, String filename, String extension) throws IOException {
 	File outputfile = new File(filename + extension);
 	ImageIO.write(img, extension, outputfile);
     }
 
-    public String getSaveDir() {
-	return saveDir;
-    }
+    // public String getSaveDir() {
+    // 	return saveDir;
+    // }
 
-    public String getFileExtension() {
-	return fileExtension;
-    }
+    // public String getFileExtension() {
+    // 	return fileExtension;
+    // }
 
-    public void setSaveDir(String saveDir) {
-	this.saveDir = saveDir;
-    }
+    // public void setSaveDir(String saveDir) {
+    // 	this.saveDir = saveDir;
+    // }
 
-    public String setFileExtension(String fileExtension) {
-	this.fileExtension = fileExtension;
-    }
+    // public void setFileExtension(String fileExtension) {
+    // 	this.fileExtension = fileExtension;
+    // }
 }

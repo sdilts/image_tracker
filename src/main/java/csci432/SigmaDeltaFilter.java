@@ -7,8 +7,6 @@ public class SigmaDeltaFilter {
 
     public int numFiltered;
     public BufferedImage background;
-    public BufferedImage subImage;     //created separate places to save these so we can compare if we need to
-    //public BufferedImage remImage;
     public int bBuffer = 1;            //buffer for averaging the background
     public int initBackground = 5;     //amount of pictures to be taken to initialize background
 
@@ -29,18 +27,14 @@ public class SigmaDeltaFilter {
      * 20 or just the original image if numFiltered is 20 or less
      **/
     public BufferedImage filter(BufferedImage image) {
-        subImage = image;
         if (numFiltered > initBackground) {
-            //remImage = filterImageRemove(image);
             refreshBackground(image);
-            subImage = filterImageSubtract(image);
+            image = filterImageSubtract(image);
         } else if(numFiltered > 0) {
             refreshBackground(image);
         } else { background = image; }
-
         numFiltered++;
-
-        return subImage;
+        return image;
     }
 
     /**
@@ -62,30 +56,6 @@ public class SigmaDeltaFilter {
             }
         }
     }
-
-    /**
-     * Calls refreshBackground() then removes background by checking
-     * to see if each pixel in the background matches the pixel in the
-     * image. If they are the same, then set that pixel value to 0.
-     * Could run into problems if pixels are not exactly the same. We
-     * may need to check a range of values in the background rather than
-     * one specific integer.
-     *
-     * @param image a BufferedImage to be filtered
-     *
-     * @return the newly filtered image
-     **/
-//    public BufferedImage filterImageRemove(BufferedImage image) {
-//        refreshBackground(image);
-//        for(int i = 0; i < image.getHeight(); i++) {
-//            for(int j = 0; j < image.getWidth(); j++) {
-//                if(background.getRGB(j, i) == image.getRGB(j, i)) {
-//                    image.setRGB(j, i, 0);
-//                }
-//            }
-//        }
-//        return image;
-//    }
 
     /**
      * Calls refreshBackground() then for each pixel in image,

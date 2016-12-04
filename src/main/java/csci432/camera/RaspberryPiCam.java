@@ -23,7 +23,7 @@ public class RaspberryPiCam implements Camera{
     @Override
     public void takePicture() {
         try {
-            Runtime.getRuntime().exec("raspistill -o -n "+saveLocation + picNumber + ".jpg");
+            Runtime.getRuntime().exec("raspistill -o "+saveLocation + picNumber + ".jpg --nopreview --timeout 1");
             this.unfilteredImages.add(saveLocation+picNumber+".jpg");
         } catch (IOException ex) {
             ex.printStackTrace();

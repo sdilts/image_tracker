@@ -50,13 +50,13 @@ public class ImageUtil {
      * @return specified image or null
      **/
     public static BufferedImage loadImage(String filename) {
-	BufferedImage img = null;
-	try {
-	    return ImageIO.read(new File(filename));
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    return null;
-	}
+        BufferedImage img = null;
+        try {
+            return ImageIO.read(new File(filename));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

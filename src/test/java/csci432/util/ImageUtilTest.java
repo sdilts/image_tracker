@@ -1,4 +1,4 @@
-package csci432;
+package csci432.util;
 
 import org.junit.Test;
 import java.awt.image.BufferedImage;

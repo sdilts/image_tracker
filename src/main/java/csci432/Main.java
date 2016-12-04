@@ -1,7 +1,8 @@
 package csci432;
 
-import csci432.camera.Camera;
 import csci432.camera.RaspberryPiCam;
+import csci432.processor.SigmaDeltaFilter;
+import csci432.util.ImageUtil;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
@@ -14,11 +15,9 @@ public class Main {
     );
     public static void main(String ... args) {
         OptionSet options = getOptions(args);
-        Camera camera = new RaspberryPiCam(options.valueOf("save_loc").toString());
-        camera.takePicture();
 
-        LOGGER.info("Processing files...");
         if (options.hasArgument("load_loc")) {
+            LOGGER.info("Processing files...");
             BufferedImage input, output;
             String path = options.valueOf("load_loc").toString();
             String fileName = new String();
@@ -34,6 +33,20 @@ public class Main {
                     LOGGER.info("Couldn't find image" +fileName);
                 }
             }
+        } else {
+            RaspberryPiCam camera = new RaspberryPiCam(options.valueOf("save_loc").toString());
+            camera.takePictureOnInterval((Long) options.valueOf("interval"));
+            SigmaDeltaFilter sigmaDeltaFilter = new SigmaDeltaFilter();
+            LOGGER.info("Begin taking images...");
+            BufferedImage input, output;
+            Integer index = 0;
+            while (true) {
+                input = camera.getUnfilteredImage();
+                if (input!=null) {
+                    output = sigmaDeltaFilter.filter(input);
+                    ImageUtil.saveImage(output, options.valueOf("save_loc").toString()+index+".", "jpg");
+                }
+            }
         }
     }
 
@@ -46,7 +59,7 @@ public class Main {
         OptionParser parser = new OptionParser();
         parser.accepts("save_loc").withRequiredArg().ofType(String.class).defaultsTo("/media/pi/SAGE/pictures/");
         parser.accepts("load_loc").withOptionalArg().ofType(String.class);
-        OptionSet options = parser.parse(args);
-        return options;
+        parser.accepts("interval").withRequiredArg().ofType(Long.class).defaultsTo(1000L);
+        return parser.parse(args);
     }
 }

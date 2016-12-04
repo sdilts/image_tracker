@@ -1,8 +1,6 @@
 package csci432.camera;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class RaspberryPiCam implements Camera{
     private Integer picNumber;
@@ -25,11 +23,10 @@ public class RaspberryPiCam implements Camera{
 
     @Override
     public void takePictureOnInterval(Long milliseconds) {
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                takePicture();
-            }
-        }, 0, milliseconds);
+        try {
+            Runtime.getRuntime().exec("raspistill -w 500 -h 500 -tl "+ milliseconds+ " -o " +saveLocation+"original_%03.jpg");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

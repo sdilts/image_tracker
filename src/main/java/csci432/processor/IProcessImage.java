@@ -1,4 +1,4 @@
-package csci432;
+package csci432.processor;
 
 import java.awt.image.BufferedImage;
 

@@ -1,9 +1,11 @@
-package csci432;
+package csci432.processor;
 import csci432.model.Blob;
 
-import java.util.concurrent.*;
-import java.util.*;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Class used for identifying moving objects, called blobs, based off

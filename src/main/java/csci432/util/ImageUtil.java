@@ -1,4 +1,4 @@
-package csci432;
+package csci432.util;
 
 import javax.imageio.ImageIO;
 import java.io.File;

@@ -1,5 +1,7 @@
-package csci432;
+package csci432.processor;
 
+import csci432.processor.IProcessImage;
+import csci432.processor.ProcessController;
 import org.junit.Test;
 import java.awt.image.BufferedImage;
 

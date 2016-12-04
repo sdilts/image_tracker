@@ -27,7 +27,7 @@ public class Main {
                 input = ImageUtil.loadImage(fileName);
                 if (input != null) {
                     output = f.filter(input);
-                    ImageUtil.saveImage(output, path + "/filter" + i + ".", "jpg");
+                    ImageUtil.saveImage(output, path + "/filter" + i, "jpg");
                     LOGGER.info(path + "/filter:" + i + ".jpg");
                 } else {
                     LOGGER.info("Couldn't find image" +fileName);

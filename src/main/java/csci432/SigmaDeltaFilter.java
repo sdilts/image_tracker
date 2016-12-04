@@ -24,7 +24,8 @@ public class SigmaDeltaFilter {
 
     /**
      * Decides either to filter image, or just set the background using
-     * a threshold for images processed so far.
+     * a threshold for images processed so far. On the first call,
+     * initializes background, curCount, curPix, and backCount
      *
      * @param image a BufferedImage to be filtered
      * @return the newly filtered image if numFiltered is more than
@@ -52,7 +53,12 @@ public class SigmaDeltaFilter {
     }
 
     /**
-     * For each pixel in the inputted image
+     * For each pixel in the inputted image,
+     * if current pixel (in inputted image) matches corresponding
+     * pixel in background, increment backCount.
+     * else, if curPix value (temp pixel value) in curColor matches
+     * current pixel, increment curCount and if curCount is higher
+     * than backCount, update background. else, update curPix
      *
      * @param image a BufferedImage to be filtered
      **/
@@ -81,6 +87,16 @@ public class SigmaDeltaFilter {
         }
     }
 
+    /**
+     * Separates each color value into red, green, and blue
+     * values. If each red, green, and blue values are within
+     * a threshold of each other, return true. Otherwise return
+     * false.
+     *
+     * @param a first color value to be compared
+     * @param b second color value to be compared
+     * @return true or false for whether the colors are close
+     **/
     public boolean colorMatch(Color a, Color b) {
         int aRed = a.getRed();
         int aGreen = a.getGreen();
@@ -98,13 +114,8 @@ public class SigmaDeltaFilter {
     }
 
     /**
-     * Calls refreshBackground() then for each pixel in image,
-     * subtracts the corresponding RGB value in background from
-     * the pixel in image. If the new value is negative, it is set
-     * to positive before being assigned to the pixel. Since both
-     * filter methods are called, refreshBackground() is commented
-     * out so the background isn't averaged twice. We will decide
-     * on one later
+     * for each pixel, calls subColor to subtract color
+     * value
      *
      * @param image a BufferedImage to be filtered
      * @return the newly filtered image

@@ -42,8 +42,9 @@ public class Main {
             Integer index = 0;
             while (true) {
                 input = camera.getUnfilteredImage();
+                LOGGER.info("Image to Filter: "+input);
                 if (input!=null) {
-                    LOGGER.info("Filtering Image: " +input + " File: "+index+".jpg");
+                    LOGGER.info("File: "+index+".jpg");
                     output = sigmaDeltaFilter.filter(input);
                     LOGGER.info("Finished Filtering...");
                     LOGGER.info("Saving Image filtered image...");

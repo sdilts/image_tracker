@@ -6,7 +6,7 @@ public class HitBox {
     private Point upperLeft;
     private Point lowerRight;
 
-    public HitBox(Point upperLeft, Point upperRight) {
+    public HitBox(Point upperLeft, Point lowerRight) {
 	this.upperLeft = upperLeft;
 	this.lowerRight = lowerRight;
     }
@@ -18,5 +18,13 @@ public class HitBox {
     public boolean isIn(Point p) {
 	//check the x values:
 	return upperLeft.x < p.x && p.x < lowerRight.x && upperLeft.y < p.y && p.y < lowerRight.y;
+    }
+
+    public Point getLeftPoint() {
+	return upperLeft;
+    }
+
+    public Point getRightPoint() {
+	return lowerRight;
     }
 }

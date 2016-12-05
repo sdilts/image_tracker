@@ -64,7 +64,7 @@ public class Main {
         OptionParser parser = new OptionParser();
         parser.accepts("save_loc").withRequiredArg().ofType(String.class).defaultsTo("/media/pi/SAGE/pictures/");
         parser.accepts("load_loc").withOptionalArg().ofType(String.class);
-        parser.accepts("interval").withRequiredArg().ofType(Long.class).defaultsTo(600L);
+        parser.accepts("interval").withRequiredArg().ofType(Long.class).defaultsTo(500L);
         parser.accepts("duration").withRequiredArg().ofType(Long.class).defaultsTo(300000L);
         return parser.parse(args);
     }

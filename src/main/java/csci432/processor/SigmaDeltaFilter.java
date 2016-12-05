@@ -10,15 +10,13 @@ public class SigmaDeltaFilter {
     protected int[][] backCount, curPix, curCount;
     public int colorThresh = 10;
     public int initBackground = 5;     //amount of pictures to be taken to initialize background
+    public int backgroundThresh = 5;
 
     /**
      * Initializes SigmaDelta Filter
      **/
     public SigmaDeltaFilter() {
         this.numFiltered = 0;
-        /*backCount = new int[700][700];
-        curCount = new int[700][700];
-        curPix = new int[700][700];*/
     }
 
     /**
@@ -31,7 +29,22 @@ public class SigmaDeltaFilter {
      * 20 or just the original image if numFiltered is 20 or less
      **/
     public BufferedImage filter(BufferedImage image) {
-        if (numFiltered > initBackground) {
+        if (numFiltered == 0) {
+            background = image;
+            curCount = new int[image.getWidth()][image.getHeight()];
+            curPix = new int[image.getWidth()][image.getHeight()];
+            backCount = new int[image.getWidth()][image.getHeight()];
+            for (int y = 0; y < image.getHeight(); y++) {
+                for (int x = 0; x < image.getWidth(); x++) {
+                    curPix[x][y] = image.getRGB(x, y);
+                }
+            }
+        } else {
+            refreshBackground(image);
+            image = filterImageSubtract(image);
+        }
+
+        /*if (numFiltered > initBackground) {
             refreshBackground(image);
             image = filterImageSubtract(image);
         } else if (numFiltered > 0) {
@@ -46,7 +59,7 @@ public class SigmaDeltaFilter {
                     curPix[x][y] = image.getRGB(x, y);
                 }
             }
-        }
+        }*/
         numFiltered++;
         return image;
     }
@@ -74,7 +87,7 @@ public class SigmaDeltaFilter {
                     curColor = new Color(curPix[x][y]);
                     if (colorMatch(curColor, imageColor)) {
                         curCount[x][y]++;
-                        if (curCount[x][y] > backCount[x][y]) {
+                        if (curCount[x][y] > backgroundThresh) {
                             background.setRGB(x, y, rgb);
                         }
                     } else {

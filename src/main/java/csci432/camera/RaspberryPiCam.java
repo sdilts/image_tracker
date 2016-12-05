@@ -51,6 +51,9 @@ public class RaspberryPiCam implements Camera{
             for (int i = picNumber+1; i < picNumber+5 && !file.exists(); i++) {
                 location = String.format(saveLocation+"original_%1$03d.jpg", i);
                 file = new File(location);
+                if (file.exists()) {
+                    picNumber = i;
+                }
             }
             image = ImageIO.read(new File(location));
             picNumber++;

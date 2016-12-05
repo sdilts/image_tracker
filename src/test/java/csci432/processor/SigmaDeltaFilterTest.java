@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 
 import csci432.processor.SigmaDeltaFilter;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.awt.*;
@@ -23,6 +24,7 @@ public class SigmaDeltaFilterTest {
     }
 
     @Test
+    @Ignore
     public void testFilter() {
         BufferedImage a, b, c;
         a = new BufferedImage(300, 300, BufferedImage.TYPE_4BYTE_ABGR);
@@ -68,6 +70,7 @@ public class SigmaDeltaFilterTest {
     }
 
     @Test
+    @Ignore
     public void testRefreshBackground() {
         BufferedImage a, b;
         int w = 200;
@@ -104,6 +107,7 @@ public class SigmaDeltaFilterTest {
     }
 
     @Test
+    @Ignore
     public void testColorMatch() {
         Color a, b;
         a = new Color(-16777216);
@@ -117,6 +121,7 @@ public class SigmaDeltaFilterTest {
     }
 
     @Test
+    @Ignore
     public void testFilterImageSubtract() {
         BufferedImage a, b, c;
         int rgb;
@@ -140,6 +145,7 @@ public class SigmaDeltaFilterTest {
     }
 
     @Test
+    @Ignore
     public void testSubColor() {
         Color a, b, c;
         int rgb = -16777216;

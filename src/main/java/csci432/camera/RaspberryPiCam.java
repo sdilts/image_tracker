@@ -1,8 +1,8 @@
 package csci432.camera;
 
-import csci432.util.ImageUtil;
-
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import static java.lang.Runtime.getRuntime;
@@ -45,9 +45,14 @@ public class RaspberryPiCam implements Camera{
      */
     public BufferedImage getUnfilteredImage() {
         String location = String.format(saveLocation+"original_%1$03d.jpg", picNumber);
-        System.out.println(location);
-        BufferedImage image = ImageUtil.loadImage(location);
-        picNumber++;
-        return image;
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File(location));
+            picNumber++;
+        } catch (IOException e) {
+            System.out.println("Image not taking yet, waiting...");
+        } finally {
+            return image;
+        }
     }
 }

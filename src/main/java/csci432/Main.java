@@ -35,7 +35,7 @@ public class Main {
             }
         } else {
             RaspberryPiCam camera = new RaspberryPiCam(options.valueOf("save_loc").toString());
-            camera.takePictureOnInterval((Long) options.valueOf("interval"));
+            camera.takePictureOnInterval((Long) options.valueOf("interval"), (Long) options.valueOf("duration"));
             SigmaDeltaFilter sigmaDeltaFilter = new SigmaDeltaFilter();
             LOGGER.info("Begin taking images...");
             BufferedImage input, output;
@@ -64,7 +64,8 @@ public class Main {
         OptionParser parser = new OptionParser();
         parser.accepts("save_loc").withRequiredArg().ofType(String.class).defaultsTo("/media/pi/SAGE/pictures/");
         parser.accepts("load_loc").withOptionalArg().ofType(String.class);
-        parser.accepts("interval").withRequiredArg().ofType(Long.class).defaultsTo(1500L);
+        parser.accepts("interval").withRequiredArg().ofType(Long.class).defaultsTo(500L);
+        parser.accepts("duration").withRequiredArg().ofType(Long.class).defaultsTo(300000L);
         return parser.parse(args);
     }
 }

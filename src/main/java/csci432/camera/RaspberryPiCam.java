@@ -30,12 +30,14 @@ public class RaspberryPiCam implements Camera{
     }
 
     @Override
-    public void takePictureOnInterval(Long milliseconds) {
-        try {
-            Process p = getRuntime().exec("raspistill -w 500 -h 500 -tl "+ milliseconds+ " -o " +saveLocation+"original_%03d.jpg --nopreview");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    public void takePictureOnInterval(Long pause, Long duration) {
+        new Thread(() -> {
+            try {
+                getRuntime().exec("raspistill -w 500 -h 500 -tl " + pause + " -t " + duration + " -o " + saveLocation + "original_%03d.jpg --nopreview");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }).start();
     }
 
     /**

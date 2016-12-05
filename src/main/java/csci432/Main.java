@@ -43,8 +43,13 @@ public class Main {
             while (true) {
                 input = camera.getUnfilteredImage();
                 if (input!=null) {
+                    LOGGER.info("Filtering Image: " +input + " File: "+index+".jpg");
                     output = sigmaDeltaFilter.filter(input);
-                    ImageUtil.saveImage(output, options.valueOf("save_loc").toString()+index+".", "jpg");
+                    LOGGER.info("Finished Filtering...");
+                    LOGGER.info("Saving Image filtered image...");
+                    ImageUtil.saveImage(output, options.valueOf("save_loc").toString()+"filtered"+index+".", "jpg");
+                    LOGGER.info("Finished Saving image...");
+                    index++;
                 }
             }
         }

@@ -39,7 +39,6 @@ public class RaspberryPiCam implements Camera{
         try {
             Process p = getRuntime().exec("raspistill -w 500 -h 500 -tl "+ milliseconds+ " -o " +saveLocation+"original_%03d.jpg --nopreview");
             p.waitFor();
-
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (InterruptedException ix) {
@@ -53,10 +52,9 @@ public class RaspberryPiCam implements Camera{
      * @return an unfiltered image
      */
     public BufferedImage getUnfilteredImage() {
-        BufferedImage image = null;
-        if (!unfilteredImages.isEmpty()) {
-            image = ImageUtil.loadImage(unfilteredImages.poll());
-        }
+        String location = String.format(saveLocation+"%3$d.jpg", picNumber);
+        BufferedImage image = ImageUtil.loadImage(location);
+        picNumber++;
         return image;
     }
 }

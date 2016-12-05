@@ -9,7 +9,8 @@ public interface Camera {
     /**
      * Takes a picture given the interval
      *
-     * @param milliseconds Pause between each picture
+     * @param pause Pause between each picture
+     * @param duration The duration of the picture taking session
      */
-    void takePictureOnInterval(Long milliseconds);
+    void takePictureOnInterval(Long pause, Long duration);
 }

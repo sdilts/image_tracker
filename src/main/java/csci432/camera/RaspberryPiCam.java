@@ -1,8 +1,8 @@
 package csci432.camera;
 
-import csci432.util.ImageUtil;
-
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import static java.lang.Runtime.getRuntime;
@@ -30,9 +30,9 @@ public class RaspberryPiCam implements Camera{
     }
 
     @Override
-    public void takePictureOnInterval(Long milliseconds) {
+    public void takePictureOnInterval(Long pause, Long duration) {
         try {
-            Process p = getRuntime().exec("raspistill -w 500 -h 500 -tl "+ milliseconds+ " -o " +saveLocation+"original_%03d.jpg --nopreview");
+            getRuntime().exec("raspistill -w 500 -h 500 -tl " + pause + " -t " + duration + " -o " + saveLocation + "original_%03d.jpg --nopreview");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -45,9 +45,22 @@ public class RaspberryPiCam implements Camera{
      */
     public BufferedImage getUnfilteredImage() {
         String location = String.format(saveLocation+"original_%1$03d.jpg", picNumber);
-        System.out.println(location);
-        BufferedImage image = ImageUtil.loadImage(location);
-        picNumber++;
-        return image;
+        BufferedImage image = null;
+        try {
+            File file = new File(location);
+            for (int i = picNumber+1; i < picNumber+5 && !file.exists(); i++) {
+                location = String.format(saveLocation+"original_%1$03d.jpg", i);
+                file = new File(location);
+                if (file.exists()) {
+                    picNumber = i;
+                }
+            }
+            image = ImageIO.read(new File(location));
+            picNumber++;
+        } catch (IOException e) {
+            System.out.println(location+ " and 5 following images not taking yet, waiting...");
+        } finally {
+            return image;
+        }
     }
 }

@@ -28,7 +28,7 @@ public class TestRaspberryPiCam {
     @Test
     @Ignore
     public void testTakePictureOnTimer() {
-        camera.takePictureOnInterval(1000L);
+        camera.takePictureOnInterval(500L, 300000L);
         assertThat(new File("/temp/1.jpg"), is(notNullValue()));
         try {
             Thread.sleep(2000L);

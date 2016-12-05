@@ -29,7 +29,22 @@ public class SigmaDeltaFilter {
      * 20 or just the original image if numFiltered is 20 or less
      **/
     public BufferedImage filter(BufferedImage image) {
-        if (numFiltered > initBackground) {
+        if (numFiltered == 0) {
+            background = image;
+            curCount = new int[image.getWidth()][image.getHeight()];
+            curPix = new int[image.getWidth()][image.getHeight()];
+            backCount = new int[image.getWidth()][image.getHeight()];
+            for (int y = 0; y < image.getHeight(); y++) {
+                for (int x = 0; x < image.getWidth(); x++) {
+                    curPix[x][y] = image.getRGB(x, y);
+                }
+            }
+        } else {
+            refreshBackground(image);
+            image = filterImageSubtract(image);
+        }
+
+        /*if (numFiltered > initBackground) {
             refreshBackground(image);
             image = filterImageSubtract(image);
         } else if (numFiltered > 0) {
@@ -44,7 +59,7 @@ public class SigmaDeltaFilter {
                     curPix[x][y] = image.getRGB(x, y);
                 }
             }
-        }
+        }*/
         numFiltered++;
         return image;
     }

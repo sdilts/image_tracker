@@ -41,10 +41,21 @@ public class Main {
             BufferedImage input, output;
             Integer index = 0;
             while (true) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ix) {
+                    ix.printStackTrace();
+                }
                 input = camera.getUnfilteredImage();
+                LOGGER.info("Image to Filter: "+input);
                 if (input!=null) {
+                    LOGGER.info("File: "+index+".jpg");
                     output = sigmaDeltaFilter.filter(input);
-                    ImageUtil.saveImage(output, options.valueOf("save_loc").toString()+index+".", "jpg");
+                    LOGGER.info("Finished Filtering...");
+                    LOGGER.info("Saving Image filtered image...");
+                    ImageUtil.saveImage(output, options.valueOf("save_loc").toString()+"filtered"+index+".", "jpg");
+                    LOGGER.info("Finished Saving image...");
+                    index++;
                 }
             }
         }

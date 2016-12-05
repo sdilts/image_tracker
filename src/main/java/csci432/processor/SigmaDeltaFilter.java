@@ -1,12 +1,14 @@
 package csci432.processor;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class SigmaDeltaFilter {
 
     public int numFiltered;
     public BufferedImage background;
-    public int bBuffer = 1;            //buffer for averaging the background
+    protected int[][] backCount, curPix, curCount;
+    public int colorThresh = 10;
     public int initBackground = 5;     //amount of pictures to be taken to initialize background
 
     /**
@@ -14,14 +16,17 @@ public class SigmaDeltaFilter {
      **/
     public SigmaDeltaFilter() {
         this.numFiltered = 0;
+        /*backCount = new int[700][700];
+        curCount = new int[700][700];
+        curPix = new int[700][700];*/
     }
 
     /**
      * Decides either to filter image, or just set the background using
-     * a threshold for images processed so far.
+     * a threshold for images processed so far. On the first call,
+     * initializes background, curCount, curPix, and backCount
      *
      * @param image a BufferedImage to be filtered
-     *
      * @return the newly filtered image if numFiltered is more than
      * 20 or just the original image if numFiltered is 20 or less
      **/
@@ -29,58 +34,118 @@ public class SigmaDeltaFilter {
         if (numFiltered > initBackground) {
             refreshBackground(image);
             image = filterImageSubtract(image);
-        } else if(numFiltered > 0) {
+        } else if (numFiltered > 0) {
             refreshBackground(image);
-        } else { background = image; }
+        } else {
+            background = image;
+            curCount = new int[image.getWidth()][image.getHeight()];
+            curPix = new int[image.getWidth()][image.getHeight()];
+            backCount = new int[image.getWidth()][image.getHeight()];
+            for (int y = 0; y < image.getHeight(); y++) {
+                for (int x = 0; x < image.getWidth(); x++) {
+                    curPix[x][y] = image.getRGB(x, y);
+                }
+            }
+        }
         numFiltered++;
         return image;
     }
 
     /**
-     * Uses a for loop to average the pixels in the image.
-     * For each pixel, add the RGB values at (j, i) in eahc image
-     * together and devide by two to get average and then assign
-     * average to the background pixel at (j, i). May need to buffer
-     * this averaging doesn't throw the background off.
+     * For each pixel in the inputted image,
+     * if current pixel (in inputted image) matches corresponding
+     * pixel in background, increment backCount.
+     * else, if curPix value (temp pixel value) in curColor matches
+     * current pixel, increment curCount and if curCount is higher
+     * than backCount, update background. else, update curPix
      *
      * @param image a BufferedImage to be filtered
      **/
     public void refreshBackground(BufferedImage image) {
-        for(int i = 0; i < image.getHeight(); i++) {
-            for(int j = 0; j < image.getWidth(); j++) {
-                int average = (bBuffer * background.getRGB(j, i))
-                        + image.getRGB(j, i);
-                average = average / (bBuffer + 1);
-                background.setRGB(j, i, average);
+        Color backColor, curColor, imageColor = null;
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                int rgb = image.getRGB(x, y);
+                backColor = new Color(background.getRGB(x, y));
+                imageColor = new Color(image.getRGB(x, y));
+                if (colorMatch(backColor, imageColor)) {
+                    backCount[x][y]++;
+                } else {
+                    curColor = new Color(curPix[x][y]);
+                    if (colorMatch(curColor, imageColor)) {
+                        curCount[x][y]++;
+                        if (curCount[x][y] > backCount[x][y]) {
+                            background.setRGB(x, y, rgb);
+                        }
+                    } else {
+                        curPix[x][y] = rgb;
+                        curCount[x][y] = 0;
+                    }
+                }
             }
         }
     }
 
     /**
-     * Calls refreshBackground() then for each pixel in image,
-     * subtracts the corresponding RGB value in background from
-     * the pixel in image. If the new value is negative, it is set
-     * to positive before being assigned to the pixel. Since both
-     * filter methods are called, refreshBackground() is commented
-     * out so the background isn't averaged twice. We will decide
-     * on one later
+     * Separates each color value into red, green, and blue
+     * values. If each red, green, and blue values are within
+     * a threshold of each other, return true. Otherwise return
+     * false.
+     *
+     * @param a first color value to be compared
+     * @param b second color value to be compared
+     * @return true or false for whether the colors are close
+     **/
+    public boolean colorMatch(Color a, Color b) {
+        int aRed = a.getRed();
+        int aGreen = a.getGreen();
+        int aBlue = a.getBlue();
+        int bRed = b.getRed();
+        int bGreen = b.getGreen();
+        int bBlue = b.getBlue();
+
+        if (Math.abs(aRed - bRed) < colorThresh && Math.abs(aGreen - bGreen)
+                < colorThresh && Math.abs(aBlue - bBlue) < colorThresh) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * for each pixel, calls subColor to subtract color
+     * value
      *
      * @param image a BufferedImage to be filtered
-     *
      * @return the newly filtered image
      **/
     public BufferedImage filterImageSubtract(BufferedImage image) {
-        //refreshBackground(image);
-        for(int i = 0; i < image.getHeight(); i++) {
-            for(int j = 0; j < image.getWidth(); j++) {
-                int newrgb = image.getRGB(j, i)
-                        - background.getRGB(j, i);
-                if(newrgb < 0) {
-                    newrgb = -newrgb;
-                }
-                image.setRGB(j, i, newrgb);
+        Color bColor = null;
+        Color iColor = null;
+        int rgb = 0;
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                bColor = new Color(background.getRGB(j, i));
+                iColor = new Color(image.getRGB(j, i));
+                rgb = subColor(bColor, iColor);
+                image.setRGB(j, i, rgb);
             }
         }
         return image;
+    }
+
+    public int subColor(Color a, Color b) {
+        int aRed = a.getRed();
+        int aGreen = a.getGreen();
+        int aBlue = a.getBlue();
+        int bRed = b.getRed();
+        int bGreen = b.getGreen();
+        int bBlue = b.getBlue();
+
+        aRed = Math.abs(aRed - bRed);
+        aGreen = Math.abs(aGreen - bGreen);
+        aBlue = Math.abs(aBlue - bBlue);
+        int rgb = (new Color(aRed, aGreen, aBlue)).getRGB();
+        return rgb;
     }
 }

@@ -41,6 +41,11 @@ public class Main {
             BufferedImage input, output;
             Integer index = 0;
             while (true) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ix) {
+                    ix.printStackTrace();
+                }
                 input = camera.getUnfilteredImage();
                 LOGGER.info("Image to Filter: "+input);
                 if (input!=null) {

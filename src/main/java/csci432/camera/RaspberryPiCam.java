@@ -4,20 +4,16 @@ import csci432.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import static java.lang.Runtime.getRuntime;
 
 public class RaspberryPiCam implements Camera{
     private Integer picNumber;
     private final String saveLocation;
-    private Queue<String> unfilteredImages;
 
     public RaspberryPiCam(String saveLocation){
         this.saveLocation = saveLocation;
         this.picNumber = 0;
-        this.unfilteredImages = new LinkedList<>();
     }
 
     @Override
@@ -25,7 +21,6 @@ public class RaspberryPiCam implements Camera{
         try {
             Process p = Runtime.getRuntime().exec("raspistill -o "+saveLocation + picNumber + ".jpg --nopreview --timeout 1");
             p.waitFor();
-            this.unfilteredImages.add(saveLocation+picNumber+".jpg");
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (InterruptedException ix) {

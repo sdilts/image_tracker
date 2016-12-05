@@ -10,15 +10,13 @@ public class SigmaDeltaFilter {
     protected int[][] backCount, curPix, curCount;
     public int colorThresh = 10;
     public int initBackground = 5;     //amount of pictures to be taken to initialize background
+    public int backgroundThresh = 5;
 
     /**
      * Initializes SigmaDelta Filter
      **/
     public SigmaDeltaFilter() {
         this.numFiltered = 0;
-        /*backCount = new int[700][700];
-        curCount = new int[700][700];
-        curPix = new int[700][700];*/
     }
 
     /**
@@ -74,7 +72,7 @@ public class SigmaDeltaFilter {
                     curColor = new Color(curPix[x][y]);
                     if (colorMatch(curColor, imageColor)) {
                         curCount[x][y]++;
-                        if (curCount[x][y] > backCount[x][y]) {
+                        if (curCount[x][y] > backgroundThresh) {
                             background.setRGB(x, y, rgb);
                         }
                     } else {

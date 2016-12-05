@@ -50,7 +50,7 @@ public class RaspberryPiCam implements Camera{
             image = ImageIO.read(new File(location));
             picNumber++;
         } catch (IOException e) {
-            System.out.println("Image not taking yet, waiting...");
+            System.out.println(location+ " image not taking yet, waiting...");
         } finally {
             return image;
         }

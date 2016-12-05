@@ -33,11 +33,8 @@ public class RaspberryPiCam implements Camera{
     public void takePictureOnInterval(Long milliseconds) {
         try {
             Process p = getRuntime().exec("raspistill -w 500 -h 500 -tl "+ milliseconds+ " -o " +saveLocation+"original_%03d.jpg --nopreview");
-            p.waitFor();
         } catch (IOException ex) {
             ex.printStackTrace();
-        } catch (InterruptedException ix) {
-            ix.printStackTrace();
         }
     }
 
@@ -47,7 +44,7 @@ public class RaspberryPiCam implements Camera{
      * @return an unfiltered image
      */
     public BufferedImage getUnfilteredImage() {
-        String location = String.format(saveLocation+"%1$3d.jpg", picNumber);
+        String location = String.format(saveLocation+"original_%1$3d.jpg", picNumber);
         BufferedImage image = ImageUtil.loadImage(location);
         picNumber++;
         return image;

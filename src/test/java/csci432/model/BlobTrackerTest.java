@@ -20,18 +20,18 @@ public class BlobTrackerTest {
     public void getBlobTest() {
 	System.out.println("Testing getBlob:");
 	String fileName = new
-	    File(getClass().getClassLoader().getResource("blobTestxs3.png").getFile()).getAbsolutePath();
+	    File(getClass().getClassLoader().getResource("blobTest3.png").getFile()).getAbsolutePath();
 	BufferedImage img = ImageUtil.loadImage(fileName);
-	HitBox h = BlobTracker.getBlob(img, 270,270);
+	HitBox h = BlobTracker.getBlob(img, 335,303);
 	Point left = h.getLeftPoint();
 	Point right = h.getRightPoint();
 	System.out.printf("LeftPoint: x = %s y = %s\n", left.x, left.y);
 	System.out.println(right);
 	//System.out.printf("RightPoint: x = %s y = %s\n", right.x, right.y);
-	assertThat(left.x, is(equalTo(250)));
-	assertThat(left.y, is(equalTo(250)));
-	assertThat(right.x, is(equalTo(290)));
-	assertThat(right.y, is(equalTo(290)));
+	assertThat(left.x, is(equalTo(279)));
+	assertThat(left.y, is(equalTo(277)));
+	assertThat(right.x, is(equalTo(367)));
+	assertThat(right.y, is(equalTo(330)));
     }
 
     @Test
@@ -41,7 +41,7 @@ public class BlobTrackerTest {
 	    File(getClass().getClassLoader().getResource("blobTest3.png").getFile()).getAbsolutePath();
 	BufferedImage img = ImageUtil.loadImage(fileName);
 	List<HitBox> boxes = BlobTracker.findBlobs(img);
-	assertThat(boxes.size(), is(equalTo(3)));
+	assertThat(boxes.size(), is(equalTo(1)));
     }
 
 }

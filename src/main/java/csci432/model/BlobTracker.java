@@ -11,6 +11,7 @@ import java.util.Deque;
 public class BlobTracker {
 
     private final static int backGroundColor = new Color(0, 0, 0).getRGB();
+    //private final static Color background = new Clolor(0,0,0);
 
 
     /**
@@ -28,38 +29,43 @@ public class BlobTracker {
 	//start 
 	while(!stack.isEmpty()) {
 	    Point p = stack.pop();
+	    numVisisted++;
+	    Color color = new Color(img.getRGB((int)p.getX(), (int) p.getY()));
+	    System.out.print("coords: " + p.x + "," + p.y);
+	    System.out.println(" Cur color = " + color);
 	    if(img.getRGB((int)p.getX(), (int)p.getY()) != backGroundColor) {
-		numVisisted++;
-		System.out.println("Num visisted = " + numVisisted);
 		//mark it:
+		int xPos = (int) p.getX();
+		int yPos = (int) p.getY();
 		img.setRGB((int)p.getX(),(int)p.getY(), backGroundColor);
-		if(p.getX() > bigX) {
+		//check our values:
+		if(xPos > bigX) {
 		    bigX = (int) p.getX();
 		}
-		if(p.getX() < smallX) {
+		if(xPos < smallX) {
 		    smallX = (int) p.getX();
 		}
-		if(p.getY() > bigY) {
+		if(yPos > bigY) {
 		    bigY = (int) p.getY();
 		}
-		if(p.getY() < smallY) {
+		if(yPos < smallY) {
 		    smallY = (int) p.getY();
 		}
-		for(int xPos = x - 1; xPos <= x+1; xPos++) {
-		    for(int yPos = y-1; yPos <= y+1; yPos++) {
-			if(xPos >= 0 && xPos < img.getWidth() &&
-			   yPos >= 0 && yPos < img.getHeight() &&
-			   xPos != x && yPos != y) {
-			    stack.push(new Point(xPos, yPos));
+		for(int i = xPos - 1; i <= xPos+1; i++) {
+		    for(int j = yPos-1; j <= yPos+1; j++) {
+			if(i >= 0 && i < img.getWidth() &&
+			   j >= 0 && j < img.getHeight() &&
+			   (i != x || j != y)) {
+			    stack.push(new Point(i, j));
 			}
 		    }
 		} //endfor
 	    } //endif
+	    else {
+		System.out.println("I'm am black at " + p.x + "," + p.y);
+	    }
 	} //endwhile
-	System.out.println("BigX = " + bigX);
-	System.out.println("BigY = " + bigY);
-	System.out.println("smallX = " + smallX);
-	System.out.println("smally = " + smallY);
+
 	return new HitBox(new Point(smallX, smallY), new Point(bigX, bigY));
     }
     

@@ -40,6 +40,13 @@ public class Blob {
     }
 
     /**
+     * Chooses which hitbox is the correct one to move to:
+     **/
+    public HitBox resolveConflict(List<HitBox> overlaps) {
+       return null;
+    }
+
+    /**
      * Returns if the blob is in a given picture
      *
      * @param picIndex the index to look at

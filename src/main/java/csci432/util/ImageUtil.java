@@ -1,4 +1,4 @@
-package csci432;
+package csci432.util;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -71,9 +71,8 @@ public class ImageUtil {
      * @return true if the flile was saved correctly
      **/
     public static boolean saveImage(BufferedImage img, String filename, String extension) {
-	File outputfile = new File(filename + extension);
-	try {
-	    
+	File outputfile = new File(filename + "." + extension);
+	try {	    
 	    ImageIO.write(img, extension, outputfile);
 	    return true;
 	} catch(IOException e) {

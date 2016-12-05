@@ -1,9 +1,10 @@
-package csci432;
+package csci432.processor;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import csci432.processor.SigmaDeltaFilter;
 import org.junit.Before;
 import org.junit.Test;
 

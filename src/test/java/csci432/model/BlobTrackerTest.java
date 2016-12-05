@@ -22,7 +22,9 @@ public class BlobTrackerTest {
 	String fileName = new
 	    File(getClass().getClassLoader().getResource("blobTest3.png").getFile()).getAbsolutePath();
 	BufferedImage img = ImageUtil.loadImage(fileName);
-	HitBox h = BlobTracker.getHitBox(img, 335,303, 10);
+
+	BlobTracker tracker = new BlobTracker();
+	HitBox h = tracker.getHitBox(img, 335,303, 10);
 	Point left = h.getLeftPoint();
 	Point right = h.getRightPoint();
 	System.out.printf("LeftPoint: x = %s y = %s\n", left.x, left.y);
@@ -40,7 +42,9 @@ public class BlobTrackerTest {
 	String fileName = new
 	    File(getClass().getClassLoader().getResource("blobTest3.png").getFile()).getAbsolutePath();
 	BufferedImage img = ImageUtil.loadImage(fileName);
-	List<HitBox> boxes = BlobTracker.findHitBoxes(img);
+
+	BlobTracker tracker = new BlobTracker();
+	List<HitBox> boxes = tracker.findHitBoxes(img);
 	assertThat(boxes.size(), is(equalTo(1)));
     }
 

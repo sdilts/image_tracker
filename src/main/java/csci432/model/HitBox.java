@@ -1,6 +1,7 @@
 package csci432.model;
 
 import java.awt.*;
+import java.util.List;
 
 public class HitBox {
     private Point upperLeft;
@@ -25,9 +26,14 @@ public class HitBox {
     }
 
     public Point getCenter() {
-	double xPos = (upperLeft.x + lowerRight.x)/2;
-	doulbe yPos = (upperLeft.y + lowerRight.y)/2;
-	return new Point(xPos, yPos);j
+	int xPos = (int) (upperLeft.x + lowerRight.x)/2;
+	int yPos = (int) (upperLeft.y + lowerRight.y)/2;
+	return new Point(xPos, yPos);
+    }
+
+    public void resolveConflicts(List<Blob> overLaps) {
+	
+
     }
 
     public Point getLeftPoint() {

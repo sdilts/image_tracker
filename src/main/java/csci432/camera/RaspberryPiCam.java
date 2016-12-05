@@ -44,7 +44,7 @@ public class RaspberryPiCam implements Camera{
      * @return an unfiltered image
      */
     public BufferedImage getUnfilteredImage() {
-        String location = String.format(saveLocation+"original_%1$3d.jpg", picNumber);
+        String location = String.format(saveLocation+"original_%1$03d.jpg", picNumber);
         System.out.println(location);
         BufferedImage image = ImageUtil.loadImage(location);
         picNumber++;

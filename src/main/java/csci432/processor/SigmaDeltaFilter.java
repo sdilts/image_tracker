@@ -28,7 +28,7 @@ public class SigmaDeltaFilter {
      * @return the newly filtered image if numFiltered is more than
      * 20 or just the original image if numFiltered is 20 or less
      **/
-    protected BufferedImage filter(BufferedImage image) {
+    public BufferedImage filter(BufferedImage image) {
         if (numFiltered == 0) {
             background = image;
             curCount = new int[image.getWidth()][image.getHeight()];

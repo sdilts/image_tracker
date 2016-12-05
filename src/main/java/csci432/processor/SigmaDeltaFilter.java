@@ -9,7 +9,6 @@ public class SigmaDeltaFilter {
     public BufferedImage background;
     protected int[][] backCount, curPix, curCount;
     public int colorThresh = 10;
-    public int backgroundThresh = 15;
     public int initBackground = 5;     //amount of pictures to be taken to initialize background
 
     /**
@@ -17,6 +16,9 @@ public class SigmaDeltaFilter {
      **/
     public SigmaDeltaFilter() {
         this.numFiltered = 0;
+        /*backCount = new int[700][700];
+        curCount = new int[700][700];
+        curPix = new int[700][700];*/
     }
 
     /**
@@ -29,7 +31,12 @@ public class SigmaDeltaFilter {
      * 20 or just the original image if numFiltered is 20 or less
      **/
     public BufferedImage filter(BufferedImage image) {
-        if (numFiltered == 0) {
+        if (numFiltered > initBackground) {
+            refreshBackground(image);
+            image = filterImageSubtract(image);
+        } else if (numFiltered > 0) {
+            refreshBackground(image);
+        } else {
             background = image;
             curCount = new int[image.getWidth()][image.getHeight()];
             curPix = new int[image.getWidth()][image.getHeight()];
@@ -39,10 +46,6 @@ public class SigmaDeltaFilter {
                     curPix[x][y] = image.getRGB(x, y);
                 }
             }
-            image = filterImageSubtract(image);
-        } else {
-            refreshBackground(image);
-            image = filterImageSubtract(image);
         }
         numFiltered++;
         return image;
@@ -58,8 +61,8 @@ public class SigmaDeltaFilter {
      *
      * @param image a BufferedImage to be filtered
      **/
-    protected void refreshBackground(BufferedImage image) {
-        Color backColor, curColor, imageColor;
+    public void refreshBackground(BufferedImage image) {
+        Color backColor, curColor, imageColor = null;
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
                 int rgb = image.getRGB(x, y);
@@ -71,7 +74,7 @@ public class SigmaDeltaFilter {
                     curColor = new Color(curPix[x][y]);
                     if (colorMatch(curColor, imageColor)) {
                         curCount[x][y]++;
-                        if (curCount[x][y] > backgroundThresh) {
+                        if (curCount[x][y] > backCount[x][y]) {
                             background.setRGB(x, y, rgb);
                         }
                     } else {
@@ -93,7 +96,7 @@ public class SigmaDeltaFilter {
      * @param b second color value to be compared
      * @return true or false for whether the colors are close
      **/
-    protected boolean colorMatch(Color a, Color b) {
+    public boolean colorMatch(Color a, Color b) {
         int aRed = a.getRed();
         int aGreen = a.getGreen();
         int aBlue = a.getBlue();
@@ -110,44 +113,35 @@ public class SigmaDeltaFilter {
     }
 
     /**
-     * for each pixel, calls subColor to subtract background's
-     * color value from the image's color value and returns the
-     * subtracted image
+     * for each pixel, calls subColor to subtract color
+     * value
      *
      * @param image a BufferedImage to be filtered
      * @return the newly filtered image
      **/
-    protected BufferedImage filterImageSubtract(BufferedImage image) {
-        Color bColor, iColor;
-        int rgb;
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                bColor = new Color(background.getRGB(x, y));
-                iColor = new Color(image.getRGB(x, y));
+    public BufferedImage filterImageSubtract(BufferedImage image) {
+        Color bColor = null;
+        Color iColor = null;
+        int rgb = 0;
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                bColor = new Color(background.getRGB(j, i));
+                iColor = new Color(image.getRGB(j, i));
                 rgb = subColor(bColor, iColor);
-                image.setRGB(x, y, rgb);
+                image.setRGB(j, i, rgb);
             }
         }
         return image;
     }
 
-    /**
-     * Separates each color value into red, green, and blue
-     * values. Subtracts each red, green, and blue values and
-     * saves them into a's values. Then converts these values
-     * into an int rgb value.
-     *
-     * @param a first color value to be compared
-     * @param b second color value to be compared
-     * @return int rgb value
-     **/
-    protected int subColor(Color a, Color b) {
+    public int subColor(Color a, Color b) {
         int aRed = a.getRed();
         int aGreen = a.getGreen();
         int aBlue = a.getBlue();
         int bRed = b.getRed();
         int bGreen = b.getGreen();
         int bBlue = b.getBlue();
+
         aRed = Math.abs(aRed - bRed);
         aGreen = Math.abs(aGreen - bGreen);
         aBlue = Math.abs(aBlue - bBlue);

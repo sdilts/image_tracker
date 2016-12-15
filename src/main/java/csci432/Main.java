@@ -20,6 +20,10 @@ public class Main {
             LOGGER.info("Processing files...");
             BufferedImage input, output;
             String path = options.valueOf("load_loc").toString();
+	    String savePath = path;
+	    if(options.has("save_loc")) {
+		savePath = options.valueOf("save_loc").toString();
+	    }
             String fileName = new String();
             SigmaDeltaFilter f = new SigmaDeltaFilter();
             for (int i = 0; i < 55; i++) {
@@ -27,7 +31,7 @@ public class Main {
                 input = ImageUtil.loadImage(fileName);
                 if (input != null) {
                     output = f.filter(input);
-                    ImageUtil.saveImage(output, path + "/filter" + i, "jpg");
+                    ImageUtil.saveImage(output, savePath + "/filter" + i, "jpg");
                     LOGGER.info(path + "/filter:" + i + ".jpg");
                 } else {
                     LOGGER.info("Couldn't find image" +fileName);
@@ -66,6 +70,7 @@ public class Main {
         parser.accepts("load_loc").withOptionalArg().ofType(String.class);
         parser.accepts("interval").withRequiredArg().ofType(Long.class).defaultsTo(500L);
         parser.accepts("duration").withRequiredArg().ofType(Long.class).defaultsTo(300000L);
+	parser.accepts("cores").withRequiredArg().ofType(Integer.class).defaultsTo(1);
         return parser.parse(args);
     }
 }

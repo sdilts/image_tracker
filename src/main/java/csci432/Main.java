@@ -16,6 +16,9 @@ public class Main {
     public static void main(String ... args) {
         OptionSet options = getOptions(args);
 
+	int numCores = (Integer) options.valueOf("cores");
+	LOGGER.info("Running with " + numCores + " cores");
+	
         if (options.hasArgument("load_loc")) {
             LOGGER.info("Processing files...");
             BufferedImage input, output;
@@ -30,7 +33,7 @@ public class Main {
                 fileName = path + "/capture" + i + ".jpg";
                 input = ImageUtil.loadImage(fileName);
                 if (input != null) {
-                    output = f.filter(input);
+                    output = f.filter(input, numCores);
                     ImageUtil.saveImage(output, savePath + "/filter" + i, "jpg");
                     LOGGER.info(path + "/filter:" + i + ".jpg");
                 } else {
@@ -48,7 +51,7 @@ public class Main {
                 input = camera.getUnfilteredImage();
                 if (input!=null) {
                     LOGGER.info("File: "+index+".jpg");
-                    output = sigmaDeltaFilter.filter(input);
+                    output = sigmaDeltaFilter.filter(input, numCores);
                     LOGGER.info("Finished Filtering...");
                     LOGGER.info("Saving Image filtered image...");
                     ImageUtil.saveImage(output, options.valueOf("save_loc").toString()+"filtered"+index+".", "jpg");

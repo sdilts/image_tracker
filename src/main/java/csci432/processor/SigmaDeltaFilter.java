@@ -28,7 +28,7 @@ public class SigmaDeltaFilter {
      * @return the newly filtered image if numFiltered is more than
      * 20 or just the original image if numFiltered is 20 or less
      **/
-    public BufferedImage filter(BufferedImage image) {
+    public BufferedImage filter(BufferedImage image, int numCores) {
         if (numFiltered == 0) {
             background = image;
             curCount = new int[image.getWidth()][image.getHeight()];
@@ -40,7 +40,7 @@ public class SigmaDeltaFilter {
                 }
             }
         } else {
-            refreshBackground(image);
+            refreshBackground(image, numCores);
             image = filterImageSubtract(image);
         }
 
@@ -75,9 +75,45 @@ public class SigmaDeltaFilter {
      * @param image a BufferedImage to be filtered
      **/
     public void refreshBackground(BufferedImage image) {
+	this.refreshBackground(image, 0, image.getHeight(), 0, image.getWidth());
+    }
+
+    public void refreshBackground(BufferedImage image, int numCores) {
+	if(numCores == 1) {
+	    this.refreshBackground(image);
+	} else {
+	    //assume we can split it, then make up the difference.
+	    Thread[] threads = new Thread[numCores];
+	    int sliceWidth = image.getHeight()/numCores;
+	    int location = 0;
+	    for(int i = 0; i < numCores; i++, location += sliceWidth) {
+		Runnable r = null;
+		if(i+1 == numCores) {
+		    r = new FilterThread(image, location, image.getHeight(),
+					 0, image.getWidth());
+		} else {
+		    r = new FilterThread(image, location, location + sliceWidth,
+					 0, image.getWidth());
+		}
+		threads[i] = new Thread(r);
+		threads[i].start();
+	    }
+	    try {
+		for(int i = 0; i < numCores; i++) {
+		    threads[i].join();
+		}
+	    } catch(InterruptedException e) {
+		e.printStackTrace();
+		System.err.println("Could not process the image.");
+	    }
+	}
+    }
+
+    private void refreshBackground(BufferedImage image, int lowXBound, int highXBound,
+				  int lowYBound, int highYBound) {
         Color backColor, curColor, imageColor = null;
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
+        for (int y = lowYBound; y < highYBound; y++) {
+            for (int x = lowXBound; x < highXBound; x++) {
                 int rgb = image.getRGB(x, y);
                 backColor = new Color(background.getRGB(x, y));
                 imageColor = new Color(image.getRGB(x, y));
@@ -160,5 +196,26 @@ public class SigmaDeltaFilter {
         aBlue = Math.abs(aBlue - bBlue);
         int rgb = (new Color(aRed, aGreen, aBlue)).getRGB();
         return rgb;
+    }
+
+    private class FilterThread implements Runnable {
+
+	int lowXBound, highXBound;
+	int lowYBound, highYBound;
+	BufferedImage img;
+	
+	public FilterThread(BufferedImage image, int lowXBound, int highXBound,
+				  int lowYBound, int highYBound) {
+	    this.lowXBound = lowXBound;
+	    this.lowYBound = lowYBound;
+	    this.highXBound = highXBound;
+	    this.highYBound = highYBound;
+	    this.img = image;
+	}
+
+	@Override
+	public void run() {
+	    refreshBackground(img,lowXBound, highXBound, lowYBound, highYBound);
+	}
     }
 }

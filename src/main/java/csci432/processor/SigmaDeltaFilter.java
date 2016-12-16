@@ -40,8 +40,9 @@ public class SigmaDeltaFilter {
                 }
             }
         } else {
-            refreshBackground(image, numCores);
-            image = filterImageSubtract(image);
+	    startProcessing(image, numCores);
+            // refreshBackground(image, numCores);
+            // image = filterImageSubtract(image);
         }
 
         /*if (numFiltered > initBackground) {
@@ -78,9 +79,10 @@ public class SigmaDeltaFilter {
 	this.refreshBackground(image, 0, image.getHeight(), 0, image.getWidth());
     }
 
-    public void refreshBackground(BufferedImage image, int numCores) {
+    public void startProcessing(BufferedImage image, int numCores) {
 	if(numCores == 1) {
 	    this.refreshBackground(image);
+	    this.filterImageSubtract(image);
 	} else {
 	    //assume we can split it, then make up the difference.
 	    Thread[] threads = new Thread[numCores];
@@ -169,11 +171,15 @@ public class SigmaDeltaFilter {
      * @return the newly filtered image
      **/
     public BufferedImage filterImageSubtract(BufferedImage image) {
+	return filterImageSubtract(image, 0, image.getHeight(), 0, image.getWidth());
+    }
+    
+    public BufferedImage filterImageSubtract(BufferedImage image, int lowXBound, int highXBound, int lowYBound, int highYBound) {
         Color bColor = null;
         Color iColor = null;
         int rgb = 0;
-        for (int i = 0; i < image.getHeight(); i++) {
-            for (int j = 0; j < image.getWidth(); j++) {
+        for (int i = lowYBound; i < highYBound; i++) {
+            for (int j = lowXBound; j < highXBound; j++) {
                 bColor = new Color(background.getRGB(j, i));
                 iColor = new Color(image.getRGB(j, i));
                 rgb = subColor(bColor, iColor);
@@ -216,6 +222,7 @@ public class SigmaDeltaFilter {
 	@Override
 	public void run() {
 	    refreshBackground(img,lowXBound, highXBound, lowYBound, highYBound);
+	    filterImageSubtract(img,lowXBound, highXBound, lowYBound, highYBound);
 	}
     }
 }
